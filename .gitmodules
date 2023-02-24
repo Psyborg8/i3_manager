@@ -1,0 +1,6 @@
+[submodule "deps/i3ipcpp"]
+	path = deps/i3ipcpp
+	url = git@github.com:drmgc/i3ipcpp.git
+[submodule "deps/cpp_logger"]
+	path = deps/cpp_logger
+	url = git@github.com:psyborg8/cpp_logger.git

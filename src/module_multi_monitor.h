@@ -4,6 +4,8 @@
 // ======================================================================
 
 #include <logger.h>
+#include <unordered_map>
+#include <vector>
 
 // ----------------------------------------------------------------------
 
@@ -20,17 +22,34 @@ public:
 	void handle_workspace_event( const i3ipc::workspace_event_t& event ) override;
 
 private:
-	void focus_output( int output );
-	void focus_workspace( int workspace );
+	void focus_output( size_t output );
+	void focus_output( std::string output );
+	void focus_workspace( size_t workspace );
+	void focus_workspace_all( size_t workspace );
+	void move_workspace( size_t workspace );
+	void set_output( std::string output, size_t idx );
 
 private:
-	void error_invalid_argument( const std::vector< std::string >& args,
-								 size_t problem,
+	void command_focus_output( std::vector< std::string > args );
+	void command_focus_workspace( std::vector< std::string > args );
+	void command_move_workspace( std::vector< std::string > args );
+	void command_set_output( std::vector< std::string > args );
+
+private:
+	void init_workspaces();
+	void send_command( std::string command );
+
+private:
+	void error_invalid_argument( std::string command,
+								 const std::vector< std::string >& args,
+								 size_t problem		= std::string::npos,
 								 std::string reason = "" ) const;
+	void error_argument_expected( std::string command, std::string type );
 
 private:
 	logger::Logger m_log;
-	std::shared_ptr< i3ipc::output_t > m_current;
+	size_t m_current;
+	std::unordered_map< size_t, std::string > m_outputs;
 };
 
 // ======================================================================
